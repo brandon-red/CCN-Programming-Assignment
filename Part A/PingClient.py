@@ -7,7 +7,7 @@ import string
 #function to create a random 56 byte message
 def createString():
 	letters = string.ascii_letters
-	return ''.join(random.choice(letters for i in range(56)))
+	return ( ''.join(random.choice(letters) for i in range(56)) )
 
 # checking command line for correct input
 if (len(sys.argv) != 3):
