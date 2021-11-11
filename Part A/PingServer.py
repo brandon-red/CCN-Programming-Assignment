@@ -19,7 +19,7 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 # Assign IP address and port number to socket
 serverSocket.bind(('127.0.0.1', port))
 # Assign Loss and Delay parameters,(Delay = 100 means 100 milliseconds)
-LOSS_RATE = 0.3
+LOSS_RATE = 0.2
 AVERAGE_DELAY = 100 
 	
 #adding this to end when 5 packets are recieved

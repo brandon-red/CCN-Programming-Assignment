@@ -56,10 +56,11 @@ while pingNum < 5:
 	rttEstimate = (end - start)/1000000
 
 	# print statement when client recieves reply from server
-	print("PING {} {} {:.3f}".format(serverIP, pingNum, rttEstimate))
+	print("PING {} {} {:.3f}ms".format(serverIP, pingNum, rttEstimate))
 	pingNum += 1
 	# wait one second before sending another ping
 	time.sleep(1)
+
 
 # closes the socket
 clientSocket.close()
