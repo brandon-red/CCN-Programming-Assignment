@@ -6,8 +6,8 @@ import string
 
 # function to create a random 56 byte message
 def createString():
-	letters = string.ascii_letters
-	return ( ''.join(random.choice(letters) for i in range(56)) )
+	letter = random.choice(string.ascii_letters)
+	return letter*56
 
 # checking command line for correct input
 if (len(sys.argv) != 3):
@@ -44,20 +44,22 @@ while pingNum < 5:
 	
 	# timeout handling to avoid exiting program prematurely	
 	except timeout:
-		# if nothing recieved from server within 1 second, 
-		# print this message and go to beginning of loop 
-		# with sequence number (pingNum) incremented by 1
+		# if nothing recieved from server within 1 second, print this statement
 		print("PING {} {} LOST".format(serverIP, pingNum))
 		pingNum += 1
+		# wait one second before sending another ping
+		time.sleep(1)
 		continue
 
 	# stop timer and calculate rtt in milliseconds	
 	end = time.perf_counter_ns()
 	rttEstimate = (end - start)/1000000
 
-	# print message when client recieves reply from server
+	# print statement when client recieves reply from server
 	print("PING {} {} {:.3f}".format(serverIP, pingNum, rttEstimate))
 	pingNum += 1
+	# wait one second before sending another ping
+	time.sleep(1)
 
 # closes the socket
 clientSocket.close()
