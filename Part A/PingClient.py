@@ -4,7 +4,7 @@ import sys
 import random
 import string
 
-#function to create a random 56 byte message
+# function to create a random 56 byte message
 def createString():
 	letters = string.ascii_letters
 	return ( ''.join(random.choice(letters) for i in range(56)) )
@@ -24,11 +24,12 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 # in case of the first packet being lost, we need to have a server ip address ready
 serverIP = gethostbyname(serverName)
 
-#keeping track of number of pings
+# keeping track of number of pings
 pingNum = 0
 
 # send a ping 5 times
 while pingNum < 5:
+	# uses createString function to set message
 	message = createString()
 	# sends message in byte type(encode function) to server
 	clientSocket.sendto(message.encode(), (serverName, serverPort))
@@ -54,7 +55,7 @@ while pingNum < 5:
 	end = time.perf_counter_ns()
 	rttEstimate = (end - start)/1000000
 
-	#print message when client recieves reply from server
+	# print message when client recieves reply from server
 	print("PING {} {} {:.3f}".format(serverIP, pingNum, rttEstimate))
 	pingNum += 1
 
