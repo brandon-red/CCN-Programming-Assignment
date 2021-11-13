@@ -37,7 +37,7 @@ PING LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL 127.0.0.1 3 1.492m
 PING TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT 127.0.0.1 4 3.529ms
 
 **From this test, and analyzing the trace on Wireshark I could confirm:
-	-the messages were being delivered correctly
+	-the messages and replies were being delivered correctly
 	-the 1 second wait in between pings was working
 	-the rtt estimates calculated in my application were very close to the rtt values seen in the UDP Timestamps on Wireshark
 	-the size of the packets are consistently 56 bytes
