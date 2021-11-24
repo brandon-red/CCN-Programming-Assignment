@@ -22,7 +22,7 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 #integralMult = ((os.path.getsize("inputfile.txt") % 512)== 0)
 
 #open the input file to be read in binary form
-f = open("inputfile.txt", 'rb')
+f = open("inputfile.txt", "rb")
 
 fileSend = True
 lastPacket = False
@@ -43,6 +43,8 @@ while True:
 	#creates message with seqNum header and 512 bytes unless it reaches end of file
 	message = seqNumInBytes + data
 	
+	print(message)
+
 	#retrainsmission loop for a max of 6 tries
 	for i in range(6):
 		print(seqNum)

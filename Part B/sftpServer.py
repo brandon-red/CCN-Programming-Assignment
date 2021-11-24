@@ -11,5 +11,19 @@ serverSocket.bind('', 9093)
 LOSS_RATE = 0
 AVERAGE_DELAY = 0
 
+#opens file for writing, must write in text, so decode message from client
+f = open("outputfile.txt", "w")
+
+while True:
+	rand = random.uniform(0, 1)
+
+	message, address = serverSocket.recvfrom(1024)
+
+
+
+
+
+
+
 
 
