@@ -55,8 +55,7 @@ while pingNum < 5:
 		continue
 
 	# stop timer and calculate rtt estimate in milliseconds	
-	end = time.perf_counter_ns()
-	rttEstimate = (end - start)/1000000
+	rttEstimate = (time.perf_counter_ns() - start)/1000000
 
 	# print statement when client recieves reply from server
 	print("PING {} {} {:.3f}ms".format(serverIP, pingNum, rttEstimate))
