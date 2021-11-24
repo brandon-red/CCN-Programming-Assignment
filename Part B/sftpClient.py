@@ -22,7 +22,8 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 #integralMult = ((os.path.getsize("inputfile.txt") % 512)== 0)
 
 #open the input file to be read in binary form
-f = open("inputfile.txt", "rb")
+f = open("inputfile.txt", "r", newline = "\r\n")
+newF = f.read().encode()
 
 fileSend = True
 lastPacket = False
@@ -32,7 +33,7 @@ seqNum = 0
 start = time.perf_counter_ns()
 while True:
 
-	data = f.read(512)
+	data = newF.read(512)
 	print(sys.getsizeof(data))
 	#indicate that this is the last packet to be sent
 	if(sys.getsizeof(data) < 512):
@@ -53,18 +54,16 @@ while True:
 		clientSocket.settimeout(1)
 		
 		try:
-			#waits for correct ack 
-			while True:
-				#get ack from server
-				ack = clientSocket.recv(1)
-				print(ack)
-				#check if ack is correct
-				if(ack == seqNumInBytes):
-					#updates seqNum
-					seqNum = abs(1-seqNum)
-					#bool to know that packet was sent successfully
-					packetSent = True
-					break
+			#get ack from server
+			ack = clientSocket.recv(1)
+			print(ack)
+			#check if ack is correct
+			if(ack == seqNumInBytes):
+				#updates seqNum
+				seqNum = abs(1-seqNum)
+				#bool to know that packet was sent successfully
+				packetSent = True
+				break
 
 		#if there is a timeout, retransmit
 		except timeout:
@@ -72,7 +71,9 @@ while True:
 
 	#if last packet is successesfully sent, end while loop 
 	if(packetSent and lastPacket):
-		transferTime = (time.perf_counter_ns() - start)/1000000
+		print("done")
+		transferTime = (time.perf_counter_ns() - start)/100000000
+		f.close()
 		clientSocket.close()
 		break
 
@@ -81,16 +82,19 @@ while True:
 		continue
 
 	else:
+		print("no bueno")
 		#indicate file could not be sent
 		fileSend = False
 		break
 
+print(fileSend)
+print(filecmp.cmp("inputfile.txt", "outputfile.txt", shallow = False))
 #if the file was sent, and if the files are matching
 if(fileSend and filecmp.cmp("inputfile.txt", "outputfile.txt", shallow = False)):
-	print("sFTP: file sent successfully to {} in {:.3}secs")
+	print("sFTP: file sent successfully to {} in {:.3}secs".format(serverIP, transferTime))
 
 else:
-	"sFTP: file transfer unsuccessful: packet retransmission limit reached"
+	print("sFTP: file transfer unsuccessful: packet retransmission limit reached")
 	
 
 
