@@ -4,6 +4,16 @@ import sys
 import random
 import os
 import filecmp
+import difflib
+
+def findDiff(file1, file2):
+	f1 = open(file1, 'r')
+	f2 = open(file2, 'r')
+	f1_data = f1.read()
+	f2_data = f2.read()
+	for line in difflib.unified_diff(f1_data, f2_data):
+		print(line)
+
 
 #checking command line for correct input
 if (len(sys.argv) != 2):
@@ -22,19 +32,23 @@ clientSocket = socket(AF_INET, SOCK_DGRAM)
 #integralMult = ((os.path.getsize("inputfile.txt") % 512)== 0)
 
 #open the input file to be read in binary form
-f = open("inputfile.txt", "r", newline = "\r\n")
-newF = f.read().encode()
+f = open("inputfile.txt", "rb")
 
 fileSend = True
 lastPacket = False
 seqNum = 0
+packetSent = False
 
 #timer started for entire file transfer
 start = time.perf_counter_ns()
 while True:
 
-	data = newF.read(512)
+	#read 479 bytes of data, turns into 512 bytes due to overhead
+	data = f.read(479)
 	print(sys.getsizeof(data))
+	#ensure ASCII encoding 
+	#data = data_raw.encode('ascii')
+	#print(sys.getsizeof(data))
 	#indicate that this is the last packet to be sent
 	if(sys.getsizeof(data) < 512):
 		lastPacket = True
@@ -44,7 +58,7 @@ while True:
 	#creates message with seqNum header and 512 bytes unless it reaches end of file
 	message = seqNumInBytes + data
 	
-	print(message)
+	#print(message)
 
 	#retrainsmission loop for a max of 6 tries
 	for i in range(6):
@@ -72,7 +86,7 @@ while True:
 	#if last packet is successesfully sent, end while loop 
 	if(packetSent and lastPacket):
 		print("done")
-		transferTime = (time.perf_counter_ns() - start)/100000000
+		transferTime = (time.perf_counter_ns() - start)/1000000000
 		f.close()
 		clientSocket.close()
 		break
@@ -88,10 +102,11 @@ while True:
 		break
 
 print(fileSend)
-print(filecmp.cmp("inputfile.txt", "outputfile.txt", shallow = False))
+fileCompare = filecmp.cmp("inputfile.txt", "outputfile.txt", shallow = False)
+print(fileCompare)
 #if the file was sent, and if the files are matching
-if(fileSend and filecmp.cmp("inputfile.txt", "outputfile.txt", shallow = False)):
-	print("sFTP: file sent successfully to {} in {:.3}secs".format(serverIP, transferTime))
+if(fileSend and fileCompare):
+	print("sFTP: file sent successfully to {} in {:.3f}secs".format(serverIP, transferTime))
 
 else:
 	print("sFTP: file transfer unsuccessful: packet retransmission limit reached")
