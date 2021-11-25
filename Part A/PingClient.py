@@ -26,6 +26,8 @@ serverIP = gethostbyname(serverName)
 
 # keep track of the number of pings
 pingNum = 0
+# keep track of the number of packets successfully sent
+seqNum = 0
 
 # send a ping 5 times
 while pingNum < 5:
@@ -48,7 +50,7 @@ while pingNum < 5:
 	# handling timeout	
 	except timeout:
 		# if nothing recieved from server within 1 second, print this statement
-		print("PING {} {} LOST".format(serverIP, pingNum))
+		print("PING {} {} LOST".format(serverIP, seqNum))
 		pingNum += 1
 		# wait one second before sending another ping
 		time.sleep(1)
@@ -58,8 +60,9 @@ while pingNum < 5:
 	rttEstimate = (time.perf_counter_ns() - start)/1000000
 
 	# print statement when client recieves reply from server
-	print("PING {} {} {:.3f}ms".format(serverIP, pingNum, rttEstimate))
+	print("PING {} {} {:.3f}ms".format(serverIP, seqNum, rttEstimate))
 	pingNum += 1
+	seqNum += 1
 	# wait one second before sending another ping
 	time.sleep(1)
 
