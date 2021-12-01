@@ -17,10 +17,11 @@ port = int(sys.argv[1])
 # Notice the use of SOCK_DGRAM for UDP packets
 serverSocket = socket(AF_INET, SOCK_DGRAM)
 # Assign IP address and port number to socket
-serverSocket.bind(('', port))
+serverSocket.bind(('127.0.0.1', port))
 # Assign Loss and Delay parameters,(Delay = 100 means 100 milliseconds)
 LOSS_RATE = 0.2
 AVERAGE_DELAY = 100 
+	
 
 while True:
 	# Generate random number in the range of 0 to 1
@@ -45,3 +46,4 @@ while True:
 	# Otherwise, the server responds
 	serverSocket.sendto(message, address)
 	print("Reply sent.")
+	

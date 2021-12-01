@@ -9,8 +9,8 @@ serverSocket = socket(AF_INET, SOCK_DGRAM)
 # Assign IP address and port number to socket
 serverSocket.bind(('', 9093))
 # Assign Loss and Delay parameters
-LOSS_RATE = .1
-AVERAGE_DELAY = 100
+LOSS_RATE = .05
+AVERAGE_DELAY = 400
 
 # Open file for writing in byte mode
 f = open("outputfile.txt", "wb")
@@ -40,6 +40,7 @@ while True:
 		print("ACK {} sent".format(message[0]))
 		serverSocket.sendto(message[0].to_bytes(1, "big"), address)
 		f.close()
+		break
 	# Check if packet header matches what receiver is expecting
 	elif(expect == message[0]):
 		f.write(message[1:])
